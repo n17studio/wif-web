@@ -289,3 +289,28 @@ a{color:inherit;}
 .mt-s{margin-top:18px;} .mt-m{margin-top:32px;} .mt-l{margin-top:54px;}
 .maxw-narrow{max-width:760px;}
 .maxw-narrow.center{margin-left:auto;margin-right:auto;}
+
+/* ---------- Logo oficial (lockup como imagen) ---------- */
+.lockup .logo-img{height:46px;width:auto;display:block;}
+@media(max-width:640px){.lockup .logo-img{height:38px;}}
+@media(max-width:380px){.lockup .logo-img{height:32px;}}
+
+/* ---------- Sellos / distintivos enmarcados ---------- */
+.seal-card{display:inline-flex;align-items:center;justify-content:center;background:#fff;
+  border-radius:18px;padding:24px;border:1px solid var(--line);
+  box-shadow:0 32px 64px -34px rgba(12,32,49,.5);}
+.seal-card img{display:block;width:100%;height:auto;max-width:260px;}
+.seal-feature .wrap{display:grid;grid-template-columns:auto 1fr;gap:60px;align-items:center;}
+@media(max-width:760px){.seal-feature .wrap{grid-template-columns:1fr;gap:34px;justify-items:start;}}
+
+/* ---------- Iniciativa de / partners ---------- */
+.partners{background:#fff;padding:66px 0;border-top:1px solid var(--line);}
+.partners-label{font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--teal);text-align:center;margin-bottom:36px;}
+.partners-logos{display:flex;align-items:center;justify-content:center;gap:clamp(40px,8vw,100px);flex-wrap:wrap;}
+.partners-logos a{display:inline-flex;opacity:.94;transition:opacity .3s ease,transform .3s ease;}
+.partners-logos a:hover{opacity:1;transform:translateY(-3px);}
+.partners-logos img{display:block;width:100%;height:auto;}
+.partners-logos .p-ava{width:96px;}
+.partners-logos .p-ecc{width:288px;}
+@media(max-width:560px){.partners-logos .p-ecc{width:214px;}.partners-logos .p-ava{width:78px;}}
