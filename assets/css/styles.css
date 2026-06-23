@@ -41,9 +41,18 @@ a{color:inherit;}
 .site-header{
   position:fixed;top:0;left:0;right:0;z-index:200;
   display:flex;align-items:center;justify-content:space-between;
-  padding:15px 32px;backdrop-filter:blur(12px);
+  padding:15px 32px;
+  transition:transform .4s ease;
+}
+/* Fondo y blur en un pseudo-elemento: si el blur viviera en el .site-header,
+   este se volvería el containing block de su .main-nav fixed y rompería el
+   menú móvil (el inset:0 se resolvería contra el header, no el viewport). */
+.site-header::before{
+  content:"";position:absolute;inset:0;z-index:-1;
+  backdrop-filter:blur(12px);
   background:color-mix(in srgb,var(--paper) 80%,transparent);
-  border-bottom:1px solid var(--line);transition:transform .4s ease,background .3s ease;
+  border-bottom:1px solid var(--line);
+  transition:background .3s ease;
 }
 .site-header.hidden{transform:translateY(-100%);}
 .lockup{display:inline-flex;align-items:center;gap:12px;text-decoration:none;}
