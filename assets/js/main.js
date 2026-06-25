@@ -1,5 +1,8 @@
 /* WIF — interacciones globales */
 (function () {
+  var root = document.documentElement;
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   // --- Mobile nav toggle ---
   var toggle = document.querySelector('.nav-toggle');
   var nav = document.querySelector('.main-nav');
@@ -14,6 +17,7 @@
       a.addEventListener('click', function () {
         nav.classList.remove('open');
         toggle.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
         document.body.style.overflow = '';
       });
     });
@@ -25,7 +29,7 @@
   var lastY = 0;
   window.addEventListener('scroll', function () {
     var y = window.scrollY;
-    if (header) header.classList.toggle('hidden', y > lastY && y > 240 && !nav.classList.contains('open'));
+    if (header) header.classList.toggle('hidden', y > lastY && y > 240 && !(nav && nav.classList.contains('open')));
     lastY = y;
     if (progress) {
       var h = document.documentElement;
@@ -34,26 +38,22 @@
   }, { passive: true });
 
   // --- Reveal on scroll ---
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-    });
-  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
-  document.querySelectorAll('.fade').forEach(function (el) { io.observe(el); });
+  // El contenido es visible por defecto; solo se oculta para revelar si hay
+  // motion permitido y soporte de IntersectionObserver. Cualquier otro caso
+  // (sin JS, sin IO, reduced-motion) deja el contenido a la vista.
+  var fades = document.querySelectorAll('.fade');
+  if (!reduceMotion && 'IntersectionObserver' in window) {
+    root.classList.add('js'); // activa el estado oculto inicial de .fade
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    fades.forEach(function (el) { io.observe(el); });
 
-  // Hero reveals immediately
-  window.addEventListener('load', function () {
-    document.querySelectorAll('.page-hero .fade').forEach(function (el) { el.classList.add('in'); });
-  });
-
-  // --- Contact form (demo, no backend) ---
-  var form = document.querySelector('form[data-demo]');
-  if (form) {
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var note = form.querySelector('.form-note');
-      if (note) { note.hidden = false; note.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-      form.reset();
+    // El hero se revela de inmediato al cargar
+    window.addEventListener('load', function () {
+      document.querySelectorAll('.page-hero .fade').forEach(function (el) { el.classList.add('in'); });
     });
   }
 })();
